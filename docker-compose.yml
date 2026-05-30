@@ -1,4 +1,18 @@
 services:
+  postgres1:
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${PG_DATABASE}
+      POSTGRES_USER: ${PG_USERNAME}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    ports:
+      - "${PG_PORT}:5432"
+    volumes:
+      - ./postgres:/data/db
+    env_file:
+      - .env
+
   zoo1:
     image: confluentinc/cp-zookeeper:7.8.0
     hostname: zoo1

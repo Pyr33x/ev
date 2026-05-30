@@ -1,0 +1,8 @@
+# binary
+/bin
+
+# env
+*.env
+
+# db
+/postgres
