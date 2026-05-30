@@ -5,8 +5,9 @@ import (
 )
 
 type Config struct {
-	Server Server
-	Kafka  Kafka
+	Server    Server
+	Kafka     Kafka
+	Telemetry Telemetry
 }
 
 type Server struct {
@@ -25,6 +26,14 @@ type Kafka struct {
 	Partition int
 }
 
+type Telemetry struct {
+	ServiceName string
+	Environment string
+	Endpoint    string
+	Insecure    bool
+	UseGRPC     bool
+}
+
 func New() *Config {
 	return &Config{
 		Server: Server{
@@ -38,6 +47,13 @@ func New() *Config {
 			GroupID:   envy.GetString("KAFKA_GROUP_ID", "ev_getters"),
 			Topic:     envy.GetString("KAFKA_TOPIC", "pipe"),
 			Partition: envy.GetInt("KAFKA_PARTITION", 0),
+		},
+		Telemetry: Telemetry{
+			ServiceName: envy.GetString("OTEL_SERVICE_NAME", "ev-service"),
+			Environment: envy.GetString("OTEL_ENVIRONMENT", "development"),
+			Endpoint:    envy.GetString("OTEL_ENDPOINT", "localhost:4317"),
+			Insecure:    envy.GetBool("OTEL_INSECURE", false),
+			UseGRPC:     envy.GetBool("OTEL_USEGRPC", false),
 		},
 	}
 }
