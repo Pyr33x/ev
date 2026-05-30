@@ -13,7 +13,7 @@ type Adapter struct {
 	reader *kafka.Reader
 }
 
-func New(ctx context.Context, cfg *config.Kafka) (*Adapter, error) {
+func New(cfg *config.Kafka) (*Adapter, error) {
 	writer := &kafka.Writer{
 		Addr:     kafka.TCP(fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)),
 		Topic:    cfg.Topic,
