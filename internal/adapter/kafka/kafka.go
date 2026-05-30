@@ -15,15 +15,16 @@ type Adapter struct {
 
 func New(cfg *config.Kafka) (*Adapter, error) {
 	writer := &kafka.Writer{
-		Addr:     kafka.TCP(fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)),
-		Topic:    cfg.Topic,
-		Balancer: &kafka.LeastBytes{},
+		Addr:                   kafka.TCP(fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)),
+		Topic:                  cfg.Topic,
+		Balancer:               &kafka.LeastBytes{},
+		AllowAutoTopicCreation: true,
 	}
 
 	readerConfig := kafka.ReaderConfig{
 		Brokers: []string{fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)},
 		Topic:   cfg.Topic,
-		// Partition: cfg.Partition
+		// Partition: cfg.Partition,
 		GroupID:  cfg.GroupID,
 		MinBytes: 1,
 		MaxBytes: 10e6,
@@ -36,9 +37,9 @@ func New(cfg *config.Kafka) (*Adapter, error) {
 	}, nil
 }
 
-func (a *Adapter) WriteMessage(ctx context.Context, key, value []byte, headers ...kafka.Header) error {
+func (a *Adapter) WriteMessage(ctx context.Context, key string, value []byte, headers ...kafka.Header) error {
 	return a.writer.WriteMessages(ctx, kafka.Message{
-		Key:     key,
+		Key:     []byte(key),
 		Value:   value,
 		Headers: headers,
 	})

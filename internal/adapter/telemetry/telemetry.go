@@ -36,16 +36,16 @@ func New(ctx context.Context, cfg *config.Telemetry) (*Adapter, error) {
 			opts = append(opts, otlptracegrpc.WithInsecure())
 		}
 		exporter, err = otlptracegrpc.New(ctx, opts...)
+	} else {
+		opts := []otlptracehttp.Option{
+			otlptracehttp.WithEndpoint(cfg.Endpoint),
+		}
+		if cfg.Insecure {
+			opts = append(opts, otlptracehttp.WithInsecure())
+		}
+		exporter, err = otlptracehttp.New(ctx, opts...)
 	}
 
-	opts := []otlptracehttp.Option{
-		otlptracehttp.WithEndpoint(cfg.Endpoint),
-	}
-	if cfg.Insecure {
-		opts = append(opts, otlptracehttp.WithInsecure())
-	}
-
-	exporter, err = otlptracehttp.New(ctx, opts...)
 	if err != nil {
 		return nil, fmt.Errorf("create OTLP exporter: %w", err)
 	}
@@ -86,6 +86,5 @@ func (a *Adapter) Shutdown(ctx context.Context) error {
 	if a.tracerProvider == nil {
 		return nil
 	}
-
 	return a.tracerProvider.Shutdown(ctx)
 }
