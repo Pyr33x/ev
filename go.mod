@@ -1,4 +1,4 @@
-module ev
+module github.com/pyr33x/ev
 
 go 1.25.0
 

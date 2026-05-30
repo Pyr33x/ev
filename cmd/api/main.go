@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
-	"ev/internal/server/http"
-	"ev/pkg/config"
 	"log"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/pyr33x/ev/internal/server/http"
+	"github.com/pyr33x/ev/pkg/config"
 
 	h "net/http"
 )

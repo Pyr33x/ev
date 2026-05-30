@@ -1,10 +1,11 @@
 package http
 
 import (
-	"ev/pkg/config"
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/pyr33x/ev/pkg/config"
 )
 
 type Server struct {
